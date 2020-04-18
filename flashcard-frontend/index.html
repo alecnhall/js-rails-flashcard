@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+    <title>Flashcard App</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Flashcard App</h1>
+      <h2 id="description">Categories</h2>
+      <button id="new-category-button" class="new-button">Add New Category</button>
+      <button id="new-flashcard-button" class="new-button">Add New Flashcard</button>
+      <div id="new-category-container">
+        <form id="new-category-form">
+          <label for="category-name">Category Name:</label>
+          <br />
+          <input
+            type="text"
+            name="category-name"
+            value="New Category Here!"
+            id="new-category-name"
+            class="input"
+          />
+          <br />
+          <input type="submit" value="Create New Category" class="submit-button" />
+        </form>
+      </div>
+      <div id="categories-container"></div>
+      <div id="new-flashcard-container">
+        <form id="new-flashcard-form">
+          <label for="flashcard-question">Question:</label>
+          <br />
+          <input
+            type="text"
+            name="flashcard-question"
+            value="Type your question here!"
+            id="new-flashcard-question"
+            class="input"
+          />
+          <br />
+          <label for="flashcard-answer">Answer:</label>
+          <br />
+          <input
+            type="text"
+            name="flashcard-answer"
+            value="Type the answer here!"
+            id="new-flashcard-answer"
+            class="input"
+          />
+          <br />
+          <input type="submit" value="Create New Flashcard" class="submit-button"/>
+        </form>
+      </div>
+      <div id="flashcard-container"></div>
+      <div id="return-to-categories">
+          <h3>Categories</h3>
+      </div>
+    </div>
+    <script src="src/components/categories.js"></script>
+    <script src="src/components/category.js"></script>
+    <script src="src/components/flashcards.js"></script>
+    <script src="src/components/flashcard.js"></script>
+    <script src="src/components/app.js"></script>
+    <script src="src/adapters/CategoriesAdpater.js"></script>
+    <script src="src/adapters/FlashcardsAdapter.js"></script>
+    <script src="src/index.js"></script>
+  </body>
+</html>
