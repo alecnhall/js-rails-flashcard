@@ -11,7 +11,7 @@ class Flashcards {
       "new-flashcard-question"
     );
     this.flashcardContainer = document.getElementById("flashcard-container");
-    this.newFlashcardAnswer = document.querySelector(".new-flashcard-answer");
+    this.newFlashcardAnswer = document.getElementById("new-flashcard-answer");
     this.newFlashCardContainer = document.getElementById(
       "new-flashcard-container"
     );
@@ -34,6 +34,15 @@ class Flashcards {
       this.backToCategories.bind(this)
     );
     this.flashcardContainer = document.getElementById("flashcard-container");
+    this.flashcardContainer.addEventListener("dblclick", this.showAnswer.bind(this))
+  }
+
+  showAnswer(e) {
+    console.log(this.flashcards)
+    let id = e.target.id
+    console.log(id)
+    let flashcard = this.flashcards.find(({id}) => id === id)
+    e.target.innerText = flashcard.answer
   }
 
   fetchAndLoadFlashcards() {
@@ -58,7 +67,6 @@ class Flashcards {
         this.newFlashcardAnswer.value = "";
         this.newFlashCardContainer.style.display = "none";
         this.newFlashcardButton.style.display = "inline";
-        // return rerenderFlashcards(categoryId);
       })
   }
 

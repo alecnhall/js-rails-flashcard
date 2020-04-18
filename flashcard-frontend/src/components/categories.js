@@ -20,7 +20,10 @@ class Categories {
     );
 
     this.categoriesContainer = document.getElementById("categories-container");
-    this.categoriesContainer.addEventListener("dblclick", this.setId.bind(this))
+    this.categoriesContainer.addEventListener(
+      "dblclick",
+      this.setCategory.bind(this)
+    );
     this.categoriesContainer.addEventListener(
       "dblclick",
       this.showFlashcards.bind(this)
@@ -42,8 +45,11 @@ class Categories {
     this.categoryContainers = document.querySelectorAll(
       "#categories-container h4"
     );
-    this.createFlashcard = document.getElementById("new-flashcard-form")
-    this.createFlashcard.addEventListener("submit", this.showFlashcards.bind(this))
+    this.createFlashcard = document.getElementById("new-flashcard-form");
+    this.createFlashcard.addEventListener(
+      "submit",
+      this.showFlashcards.bind(this)
+    );
   }
 
   fetchAndLoadCategories() {
@@ -89,24 +95,26 @@ class Categories {
     this.newFlashCard.style.display = "none";
   }
 
-  appendFlashCard (object) {
+  appendFlashCard(object) {
     object.included.map((flashcard) => {
-      let h3 = document.createElement("h3")
-      h3.innerHTML = flashcard.attributes.question
-      h3.setAttribute("class", "flashcard")
-      this.flashcardContainer.appendChild(h3)
+      let h3 = document.createElement("h3");
+      h3.innerHTML = flashcard.attributes.question;
+      h3.setAttribute("class", "flashcard");
+      h3.setAttribute("id", flashcard.attributes.id)
+      this.flashcardContainer.appendChild(h3);
     });
   }
 
-  setId(e) {
-    console.log(e.target)
-    this.description.setAttribute("data-id", e.target.getAttribute("data-id"))
+  setCategory(e) {
+    this.description.setAttribute("data-id", e.target.getAttribute("data-id"));
+    this.description.innerHTML = `${e.target.innerText}`;
   }
 
   showFlashcards(e) {
     e.preventDefault();
-    const id = this.description.getAttribute("data-id")
-    const categoryName = e.target.innerHTML;
+    this.flashcardContainer.innerHTML = "";
+    const id = this.description.getAttribute("data-id");
+    const categoryName = this.description.innerHTML;
     this.adapter.showCategory(id).then((object) => {
       this.appendFlashCard(object);
     });
@@ -114,8 +122,7 @@ class Categories {
     this.newCategoryButton.style.display = "none";
     this.description.innerHTML = categoryName;
     this.toCategories.style.display = "inline";
-    this.categoryFormContainer.style.display = "none"
-
+    this.categoryFormContainer.style.display = "none";
   }
 
   // rerenderFlashcards() {
