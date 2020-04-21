@@ -5,6 +5,6 @@ class Category {
   }
 
   renderName() {
-    return `<h4 class="flaschcard-category" data-id="${this.id}">${this.name.toUpperCase()}</h4>`;
+    return `<h4 class="category" data-id="${this.id}">${this.name.toUpperCase()}</h4>`;
   }
 }

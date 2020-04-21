@@ -13,6 +13,8 @@ class Categories {
       this.createCategory.bind(this)
     );
 
+    this.newCategory = document.getElementById("new-category-container")
+
     this.newCategoryButton = document.getElementById("new-category-button");
     this.newCategoryButton.addEventListener(
       "click",
@@ -23,10 +25,6 @@ class Categories {
     this.categoriesContainer.addEventListener(
       "dblclick",
       this.setCategory.bind(this)
-    );
-    this.categoriesContainer.addEventListener(
-      "dblclick",
-      this.showFlashcards.bind(this)
     );
 
     this.toCategories = document.getElementById("return-to-categories");
@@ -46,10 +44,6 @@ class Categories {
       "#categories-container h4"
     );
     this.createFlashcard = document.getElementById("new-flashcard-form");
-    this.createFlashcard.addEventListener(
-      "submit",
-      this.showFlashcards.bind(this)
-    );
   }
 
   fetchAndLoadCategories() {
@@ -78,13 +72,6 @@ class Categories {
     this.categoriesContainer.innerHTML = this.categories
       .map((category) => category.renderName())
       .join("");
-    this.colorize();
-  }
-
-  colorize() {
-    this.categoryContainers.forEach(
-      (category) => (category.style.backgroundColor = "#8884FF")
-    );
   }
 
   goBackToCategories(e) {
@@ -93,43 +80,13 @@ class Categories {
     this.description.innerText = "Categories";
     this.newCategoryButton.style.display = "inline";
     this.newFlashCard.style.display = "none";
-  }
-
-  appendFlashCard(object) {
-    object.included.map((flashcard) => {
-      let h3 = document.createElement("h3");
-      h3.innerHTML = flashcard.attributes.question;
-      h3.setAttribute("class", "flashcard");
-      h3.setAttribute("id", flashcard.attributes.id)
-      this.flashcardContainer.appendChild(h3);
-    });
+    this.newCategoryButton.style.display = "inline"
   }
 
   setCategory(e) {
     this.description.setAttribute("data-id", e.target.getAttribute("data-id"));
     this.description.innerHTML = `${e.target.innerText}`;
   }
-
-  showFlashcards(e) {
-    e.preventDefault();
-    this.flashcardContainer.innerHTML = "";
-    const id = this.description.getAttribute("data-id");
-    const categoryName = this.description.innerHTML;
-    this.adapter.showCategory(id).then((object) => {
-      this.appendFlashCard(object);
-    });
-    this.categoriesContainer.style.display = "none";
-    this.newCategoryButton.style.display = "none";
-    this.description.innerHTML = categoryName;
-    this.toCategories.style.display = "inline";
-    this.categoryFormContainer.style.display = "none";
-  }
-
-  // rerenderFlashcards() {
-  //   this.adapter.showCategory().then((object) => {
-  //     this.appendFlashCard(object);
-  //   });
-  // }
 
   showCategoryForm(e) {
     this.categoryFormContainer.style.display = "inline";

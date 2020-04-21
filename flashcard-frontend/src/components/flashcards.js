@@ -16,7 +16,13 @@ class Flashcards {
       "new-flashcard-container"
     );
     this.category = document.getElementById("categories-container");
-    this.category.addEventListener("dblclick", this.showCategoryFlashCards.bind(this));
+    this.newCategoryContainer = document.getElementById(
+      "new-category-container"
+    );
+    this.category.addEventListener(
+      "dblclick",
+      this.renderFlashcards.bind(this)
+    );
     this.flashcardForm = document.getElementById("new-flashcard-form");
     this.flashcardForm.addEventListener(
       "submit",
@@ -33,16 +39,49 @@ class Flashcards {
       "dblclick",
       this.backToCategories.bind(this)
     );
-    this.flashcardContainer = document.getElementById("flashcard-container");
-    this.flashcardContainer.addEventListener("dblclick", this.showAnswer.bind(this))
+    this.newCategoryButton = document.getElementById("new-category-button");
   }
 
-  showAnswer(e) {
-    console.log(this.flashcards)
-    let id = e.target.id
-    console.log(id)
-    let flashcard = this.flashcards.find(({id}) => id === id)
-    e.target.innerText = flashcard.answer
+  renderAnswer(e) {
+    let flashcard = this.findFlashcard(e);
+    e.target.innerText = `${flashcard.answer}`
+    e.target.setAttribute("id", "flashcard-answer")
+    this.answer = document.getElementById("flashcard-answer")
+    this.answer.addEventListener("dblclick", this.returnToQuestion.bind(this))
+  }
+  
+  returnToQuestion(e){
+    let flashcard = this.findFlashcard(e)
+    this.answer.innerText = `${flashcard.question}`
+    this.answer.setAttribute("id", "flashcard-question")
+    this.renderFlashcards()
+  }
+
+  findFlashcard(e){
+    let flashcardId = parseInt(e.target.getAttribute("data-id"))
+    let flashcard = this.flashcards.find(flashcard => flashcard.id === flashcardId)
+    return flashcard
+  }
+
+  renderFlashcards() {
+    let catId = parseInt(this.categoryDescription.getAttribute("data-id"));
+    let categoryFlashcards = this.flashcards.filter(
+      (flashcard) => flashcard.categoryId === catId
+    );
+    this.flashcardContainer.innerHTML = categoryFlashcards
+      .map((flashcard) => flashcard.renderFlashcard())
+      .join("");
+    this.category.style.display = "none";
+    this.categoriesButton.style.display = "inline";
+    this.newCategoryButton.style.display = "none";
+    this.newFlashcardButton.style.display = "inline";
+    this.flashcardContainer.style.display = "inline";
+    this.newFlashCardContainer.style.display = "none";
+    this.flashcard = document.querySelectorAll("#flashcard-container h4");
+    this.flashcard.forEach(flashcard => flashcard.addEventListener(
+      "dblclick",
+      this.renderAnswer.bind(this)
+    ));
   }
 
   fetchAndLoadFlashcards() {
@@ -61,19 +100,15 @@ class Flashcards {
     this.adapter
       .createFlashcard(question, answer, categoryId)
       .then((flashcard) => {
+        console.log(flashcard);
         const flashcardAttributes = flashcard.data.attributes;
         this.flashcards.push(new Flashcard(flashcardAttributes));
         this.newFlashcardQuestion.value = "";
         this.newFlashcardAnswer.value = "";
         this.newFlashCardContainer.style.display = "none";
         this.newFlashcardButton.style.display = "inline";
-      })
-  }
-
-  showCategoryFlashCards(e) {
-    this.newFlashcardButton.style.display = "inline";
-    this.flashcardContainer.style.display = "inline";
-    this.newFlashCardContainer.style.display = "none"
+        this.renderFlashcards();
+      });
   }
 
   showNewFlashcardContainer(e) {
