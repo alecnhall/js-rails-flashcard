@@ -7,6 +7,11 @@ class Flashcard {
   }
 
   renderFlashcard() {
-    return `<h4 class="flashcard" id="flashcard-question" data-id="${this.id}">${this.question}</h4>`;
+    return `<h4 class="flashcard" id="flashcard-question" data-id="${this.id}">
+    ${this.question}
+    <div>
+      <img id="${this.id}" src="https://img.icons8.com/metro/26/000000/delete-sign.png"/>
+    </div>
+    </h4>`;
   }
 }

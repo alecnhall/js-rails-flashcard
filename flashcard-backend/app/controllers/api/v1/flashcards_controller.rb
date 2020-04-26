@@ -20,7 +20,7 @@ class Api::V1::FlashcardsController < ApplicationController
     render :show
   end
 
-  def delete
+  def destroy
     @flashcard.destroy
   end
 

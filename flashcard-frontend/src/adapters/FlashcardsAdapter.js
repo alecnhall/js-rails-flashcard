@@ -12,14 +12,20 @@ class FlashcardsAdapter {
     const flashcard = {
       question: question,
       answer: answer,
-      category_id: id
+      category_id: id,
     };
-    
+
     const res = await fetch(this.baseUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ flashcard }),
     });
     return await res.json();
+  }
+
+  async deleteFlashcard(id) {
+    const res = await fetch(`${this.baseUrl}/${id}`, {
+      method: "DELETE",
+    });
   }
 }

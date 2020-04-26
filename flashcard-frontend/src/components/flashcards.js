@@ -43,24 +43,27 @@ class Flashcards {
   }
 
   renderAnswer(e) {
+    if (e.target && e.target.nodeName == "H4"){
     let flashcard = this.findFlashcard(e);
-    e.target.innerText = `${flashcard.answer}`
-    e.target.setAttribute("id", "flashcard-answer")
-    this.answer = document.getElementById("flashcard-answer")
-    this.answer.addEventListener("dblclick", this.returnToQuestion.bind(this))
-  }
-  
-  returnToQuestion(e){
-    let flashcard = this.findFlashcard(e)
-    this.answer.innerText = `${flashcard.question}`
-    this.answer.setAttribute("id", "flashcard-question")
-    this.renderFlashcards()
+    e.target.innerText = `${flashcard.answer}`;
+    e.target.setAttribute("id", "flashcard-answer");
+    this.answer = document.getElementById("flashcard-answer");
+    this.answer.addEventListener("dblclick", this.returnToQuestion.bind(this))};
   }
 
-  findFlashcard(e){
-    let flashcardId = parseInt(e.target.getAttribute("data-id"))
-    let flashcard = this.flashcards.find(flashcard => flashcard.id === flashcardId)
-    return flashcard
+  returnToQuestion(e) {
+    let flashcard = this.findFlashcard(e);
+    e.target.innerText = `${flashcard.question}`;
+    e.target.setAttribute("id", "flashcard-question");
+    this.renderFlashcards();
+  }
+
+  findFlashcard(e) {
+    let flashcardId = parseInt(e.target.getAttribute("data-id"));
+    let flashcard = this.flashcards.find(
+      (flashcard) => flashcard.id === flashcardId
+    );
+    return flashcard;
   }
 
   renderFlashcards() {
@@ -78,10 +81,22 @@ class Flashcards {
     this.flashcardContainer.style.display = "inline";
     this.newFlashCardContainer.style.display = "none";
     this.flashcard = document.querySelectorAll("#flashcard-container h4");
-    this.flashcard.forEach(flashcard => flashcard.addEventListener(
-      "dblclick",
-      this.renderAnswer.bind(this)
-    ));
+    this.delete = document.querySelectorAll("#flashcard-container h4 div")
+    this.flashcard.forEach((flashcard) =>
+      flashcard.addEventListener("dblclick", this.renderAnswer.bind(this))
+    );
+    this.delete.forEach((element) => {
+      element.addEventListener("dblclick", this.deleteFlashcard.bind(this))
+    })
+  }
+
+  deleteFlashcard(e){ 
+    let id = parseInt(e.target.getAttribute("id"))
+    this.adapter.deleteFlashcard(id);
+    this.flashcards.filter(flashcard => {
+      delete flashcard.id === id
+    })
+    this.renderFlashcards();
   }
 
   fetchAndLoadFlashcards() {
@@ -100,7 +115,6 @@ class Flashcards {
     this.adapter
       .createFlashcard(question, answer, categoryId)
       .then((flashcard) => {
-        console.log(flashcard);
         const flashcardAttributes = flashcard.data.attributes;
         this.flashcards.push(new Flashcard(flashcardAttributes));
         this.newFlashcardQuestion.value = "";
