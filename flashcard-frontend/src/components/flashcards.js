@@ -43,12 +43,16 @@ class Flashcards {
   }
 
   renderAnswer(e) {
-    if (e.target && e.target.nodeName == "H4"){
-    let flashcard = this.findFlashcard(e);
-    e.target.innerText = `${flashcard.answer}`;
-    e.target.setAttribute("id", "flashcard-answer");
-    this.answer = document.getElementById("flashcard-answer");
-    this.answer.addEventListener("dblclick", this.returnToQuestion.bind(this))};
+    if (e.target && e.target.nodeName == "H4") {
+      let flashcard = this.findFlashcard(e);
+      e.target.innerText = `${flashcard.answer}`;
+      e.target.setAttribute("id", "flashcard-answer");
+      this.answer = document.getElementById("flashcard-answer");
+      this.answer.addEventListener(
+        "dblclick",
+        this.returnToQuestion.bind(this)
+      );
+    }
   }
 
   returnToQuestion(e) {
@@ -67,6 +71,7 @@ class Flashcards {
   }
 
   renderFlashcards() {
+    this.flashcardContainer.innerHTML = "";
     let catId = parseInt(this.categoryDescription.getAttribute("data-id"));
     let categoryFlashcards = this.flashcards.filter(
       (flashcard) => flashcard.categoryId === catId
@@ -81,25 +86,26 @@ class Flashcards {
     this.flashcardContainer.style.display = "inline";
     this.newFlashCardContainer.style.display = "none";
     this.flashcard = document.querySelectorAll("#flashcard-container h4");
-    this.delete = document.querySelectorAll("#flashcard-container h4 div")
+    this.delete = document.querySelectorAll("#flashcard-container h4 div");
     this.flashcard.forEach((flashcard) =>
       flashcard.addEventListener("dblclick", this.renderAnswer.bind(this))
     );
     this.delete.forEach((element) => {
-      element.addEventListener("dblclick", this.deleteFlashcard.bind(this))
-    })
+      element.addEventListener("dblclick", this.deleteFlashcard.bind(this));
+    });
   }
 
-  deleteFlashcard(e){ 
-    let id = parseInt(e.target.getAttribute("id"))
+  deleteFlashcard(e) {
+    let id = parseInt(e.target.getAttribute("id"));
     this.adapter.deleteFlashcard(id);
-    this.flashcards.filter(flashcard => {
-      delete flashcard.id === id
+    this.flashcards = this.flashcards.filter(flashcard => {
+      return flashcard.id !== id
     })
     this.renderFlashcards();
   }
 
   fetchAndLoadFlashcards() {
+    this.flashcards.length = 0;
     this.adapter.getFlashcards().then((flashcards) => {
       flashcards.data.forEach((flashcard) => {
         this.flashcards.push(new Flashcard(flashcard.attributes));
